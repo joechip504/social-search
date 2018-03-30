@@ -1,1 +1,5 @@
-Hello World
+- document steps to set up mongo (locally and deployed) @Tim
+- dummy email address and api keys (start with twitter) @Tim
+- pull some data to a file @Joe
+- load from file into search @Joe
+- (frontend can wait)
