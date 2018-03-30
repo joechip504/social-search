@@ -1,5 +1,6 @@
 package jpringle.fetch.twitter
 
+import scala.collection.JavaConverters._
 import com.typesafe.config.ConfigFactory
 import twitter4j.{ResponseList, Status, TwitterFactory}
 import twitter4j.conf.ConfigurationBuilder
@@ -12,6 +13,7 @@ object Main extends App {
     .setOAuthConsumerSecret(conf.getString("credentials.twitter.oauth-consumer-secret"))
     .setOAuthAccessToken(conf.getString("credentials.twitter.oauth-access-token"))
     .setOAuthAccessTokenSecret(conf.getString("credentials.twitter.oauth-access-secret"))
+    .setTweetModeExtended(true)
     .build()
 
   val donald = 25073877
@@ -19,6 +21,11 @@ object Main extends App {
   val r: ResponseList[Status] = twitter.getUserTimeline(donald)
 
   println(s"RateLimitStatus: ${r.getRateLimitStatus}")
-  r.iterator().forEachRemaining { s => println(s.getText) }
+
+  r.iterator().asScala.foreach { s =>
+    println(s"Created: ${s.getCreatedAt}")
+    println(s"Text: ${s.getText}")
+    println
+  }
 
 }
