@@ -1,0 +1,11 @@
+target/
+*/target
+
+*~
+*.xml
+*.iml
+*.class
+*.swp
+
+*secrets.conf
+*overrides.conf

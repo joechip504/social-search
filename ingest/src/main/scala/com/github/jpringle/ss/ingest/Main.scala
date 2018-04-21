@@ -1,31 +1,12 @@
-package ingest
+package com.github.jpringle.ss.ingest
 
+import akka.actor.ActorSystem
+import com.github.jpringle.ss.ingest.actor.TweetFetcher
 import com.typesafe.config.ConfigFactory
 import twitter4j._
 import twitter4j.conf.ConfigurationBuilder
 
-import scala.collection.JavaConverters._
-
 object Main extends App {
-
-  def printAllTweets(user: Long, twitter: Twitter) = {
-    def paginate(paging: Paging): Unit = {
-      println(paging.getPage)
-      val r = twitter.getUserTimeline(user, paging)
-      r.iterator().asScala.foreach { s =>
-        println(s"Created: ${s.getCreatedAt}")
-        println(s"Text: ${s.getText}")
-        println
-      }
-      if (r.size() != 0) {
-        val nextPage = new Paging(paging.getPage + 1, 100)
-        paginate(nextPage)
-      }
-    }
-
-    val paging = new Paging(1, 100)
-    paginate(paging)
-  }
 
   val conf = ConfigFactory.load()
   val twitterConf = new ConfigurationBuilder()
@@ -39,6 +20,7 @@ object Main extends App {
   val donald = 25073877
   val twitter = new TwitterFactory(twitterConf).getInstance()
 
-  printAllTweets(donald, twitter)
-
+  val sys = ActorSystem.create("ss")
+  val props = TweetFetcher.props(twitter, donald)
+  sys.actorOf(props)
 }
