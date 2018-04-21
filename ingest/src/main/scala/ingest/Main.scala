@@ -1,16 +1,17 @@
-package jpringle.fetch.twitter
+package ingest
 
-import scala.collection.JavaConverters._
 import com.typesafe.config.ConfigFactory
 import twitter4j._
 import twitter4j.conf.ConfigurationBuilder
+
+import scala.collection.JavaConverters._
 
 object Main extends App {
 
   def printAllTweets(user: Long, twitter: Twitter) = {
     def paginate(paging: Paging): Unit = {
       println(paging.getPage)
-      val r = twitter.getUserTimeline(donald, paging)
+      val r = twitter.getUserTimeline(user, paging)
       r.iterator().asScala.foreach { s =>
         println(s"Created: ${s.getCreatedAt}")
         println(s"Text: ${s.getText}")

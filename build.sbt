@@ -16,13 +16,15 @@ lazy val akkaActorDeps = Seq(
   "com.typesafe.akka" %% "akka-testkit" % akkaActorVersion % Test
 )
 
-lazy val stream = project
+lazy val ingest = project
   .settings(commonSettings)
   .settings(libraryDependencies ++= commonDeps)
   .settings(libraryDependencies ++= akkaActorDeps)
   .settings(libraryDependencies ++= Seq(
-    "org.twitter4j" % "twitter4j-core" % "4.0.6"
+    "org.twitter4j" % "twitter4j-core" % "4.0.6",
+    "org.apache.lucene" % "lucene-core" % "7.2.1"
   ))
 
+
 lazy val root = (project in file("."))
-  .aggregate(stream)
+  .aggregate(ingest)
